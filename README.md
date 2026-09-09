@@ -42,7 +42,7 @@ wget -qO- https://raw.githubusercontent.com/guochan2019/onekey-frpc_alp/main/one
   https://github.com/fatedier/frp
 ========================================
 
-[INFO] 检测到 frpc 0.70.0 已安装
+[INFO] 检测到 frpc 0.71.0 已安装
 
 请选择操作：
   1. 安装 / 升级 frpc
@@ -65,6 +65,8 @@ wget -qO- https://raw.githubusercontent.com/guochan2019/onekey-frpc_alp/main/one
 | 2/4 | 创建配置模板 `/opt/frp/frpc.toml`（幂等，不覆盖已有配置） |
 | 3/4 | 创建 OpenRC 服务 `/etc/init.d/frpc`（supervise-daemon 自动重启） |
 | 4/4 | 显示完成信息 |
+
+> **GitHub 下载镜像 fallback（2026-09-09）**：脚本内下载已内置 `dl_gh`——顺序 **gh-proxy.com → ghfast.top → 官方垫底**，网关 50.1 等直连受限环境自动走镜像（官方 release 直连实测超时），安装与升级均生效。版本查询走 api.github.com 直连（gh-proxy 对其 403），失败用内置 FALLBACK 版本号。
 
 ---
 
