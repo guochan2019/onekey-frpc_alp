@@ -66,9 +66,11 @@ get_current_ver() {
 
 # ---------- 基础依赖 ----------
 ensure_deps() {
-  # busybox 自带 wget/tar, 但 GNU wget/curl 更稳 (https 下载 github release)
+  # busybox 自带 wget applet, 需检测 GNU wget (https 下载 github release 可靠性)
   NEED=""
-  command -v wget >/dev/null 2>&1 || NEED="$NEED wget"
+  if ! wget --version 2>/dev/null | grep -q GNU; then
+    NEED="$NEED wget"
+  fi
   command -v curl >/dev/null 2>&1 || NEED="$NEED curl"
   # https 下载 github release 需要 CA 证书
   [ -f /etc/ssl/certs/ca-certificates.crt ] || NEED="$NEED ca-certificates"
