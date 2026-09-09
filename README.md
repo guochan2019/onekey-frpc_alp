@@ -25,6 +25,11 @@ chmod +x onekey-frpc_alp.sh
 wget -qO- https://raw.githubusercontent.com/guochan2019/onekey-frpc_alp/main/onekey-frpc_alp.sh | sh
 ```
 
+> 直连受限环境(网关 50.1 等)用 GitHub 镜像加速:
+> ```bash
+> wget -qO- https://gh-proxy.com/https://raw.githubusercontent.com/guochan2019/onekey-frpc_alp/main/onekey-frpc_alp.sh | sh
+> ```
+
 ---
 
 ## 使用方式
