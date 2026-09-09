@@ -23,6 +23,17 @@ info()  { echo -e "${GREEN}[INFO]${NC} $1"; }
 warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
 err()   { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
+# ---------- GitHub 下载带镜像 fallback: 官方直连 → gh-proxy.com → ghfast.top ----------
+# $1 = 完整 URL (github.com / raw.githubusercontent.com), $2 = 输出文件
+dl_gh() {
+  for p in "" "https://gh-proxy.com/" "https://ghfast.top/"; do
+    if wget -q --timeout=20 -O "$2" "${p}$1"; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 # ---------- 检测 root ----------
 if [ "$(id -u)" -ne 0 ]; then
   err "请以 root 用户运行 (当前非 root)"
@@ -105,7 +116,7 @@ do_install() {
   DOWNLOAD_URL="https://github.com/fatedier/frp/releases/download/${FRP_VER}/frp_${LATEST_NUM}_linux_${FRP_ARCH}.tar.gz"
   TMPDIR=$(mktemp -d)
   cd "$TMPDIR"
-  wget -q "$DOWNLOAD_URL" -O frp.tar.gz
+  dl_gh "$DOWNLOAD_URL" frp.tar.gz || err "frp 下载失败(官方+镜像均不可用)"
   tar xzf frp.tar.gz
   EXTRACT_DIR=$(find . -maxdepth 1 -type d -name "frp_*" | head -1)
   [ -z "$EXTRACT_DIR" ] && err "解压后找不到 frp 目录"
@@ -247,7 +258,7 @@ do_upgrade() {
 
   TMPDIR=$(mktemp -d)
   cd "$TMPDIR"
-  wget -q "$DOWNLOAD_URL" -O frp.tar.gz
+  dl_gh "$DOWNLOAD_URL" frp.tar.gz || err "frp 下载失败(官方+镜像均不可用)"
   tar xzf frp.tar.gz
   EXTRACT_DIR=$(find . -maxdepth 1 -type d -name "frp_*" | head -1)
   [ -z "$EXTRACT_DIR" ] && err "解压后找不到 frp 目录"
